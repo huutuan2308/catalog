@@ -2,6 +2,7 @@ from django.contrib import admin
 
 from .models import Book, Author, Language, BookInstance, Genre
 
+
 # Register your models here.
 # admin.site.register(Book)
 class BooksInstanceInline(admin.TabularInline):
@@ -11,6 +12,9 @@ class BooksInstanceInline(admin.TabularInline):
 class BookAdmin(admin.ModelAdmin):
   list_display=('title','author','display_genre')
   inlines = [BooksInstanceInline]
+
+class BookInline(admin.TabularInline):
+    model = Book
 
 class BookInline(admin.TabularInline):
     model = Book
@@ -33,3 +37,5 @@ class BookInstanceAdmin(admin.ModelAdmin):
         'fields': ('status', 'due_back')
     }),
   )
+admin.site.register(Language)
+admin.site.register(Genre)
