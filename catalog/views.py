@@ -46,7 +46,7 @@ class BookDetailView(generic.DetailView):
         return render(request, 'catalog/book_detail.html', context={'book': book})
 class AuthorListView(generic.ListView):
     model = Author
-    paginate_by = 2
+    paginate_by = 10
     context_object_name = 'author_list'   # your own name for the list as a template variable
     queryset = Author.objects.all()
     template_name = 'author/my_arbitrary_template_name_list.html'  # Specify your own template name/location
@@ -120,27 +120,30 @@ from django.urls import reverse_lazy
 
 from catalog.models import Author
 
-class AuthorCreate(CreateView):
+class AuthorCreate(PermissionRequiredMixin,CreateView):
     model = Author
     fields = '__all__'
     initial = {'date_of_death': '05/01/2018'}
-
-class AuthorUpdate(UpdateView):
+    permission_required = 'catalog.can_mark_returned'
+class AuthorUpdate(PermissionRequiredMixin,UpdateView):
     model = Author
     fields = ['first_name', 'last_name', 'date_of_birth', 'date_of_death']
-
-class AuthorDelete(DeleteView):
+    permission_required = 'catalog.can_mark_returned'
+class AuthorDelete(PermissionRequiredMixin,DeleteView):
     model = Author
     success_url = reverse_lazy('authors')
-class BookCreate(CreateView):
+    permission_required = 'catalog.can_mark_returned'
+class BookCreate(PermissionRequiredMixin,CreateView):
     model = Book
     fields = '__all__'
     # initial = {'date_of_death': '05/01/2018'}
-
-class BookUpdate(UpdateView):
+    permission_required = 'catalog.can_mark_returned'
+class BookUpdate(PermissionRequiredMixin,UpdateView):
     model = Book
     # fields = ['first_name', 'last_name', 'date_of_birth', 'date_of_death']
     fields='__all__'
-class BookDelete(DeleteView):
+    permission_required = 'catalog.can_mark_returned'
+class BookDelete(PermissionRequiredMixin,DeleteView):
     model = Book
     success_url = reverse_lazy('books')
+    permission_required = 'catalog.can_mark_returned'
